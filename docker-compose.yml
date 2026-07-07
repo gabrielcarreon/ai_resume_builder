@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8000:8080"
+  pg_vector:
+    image: pgvector/pgvector:0.8.4-pg18-trixie
+    container_name: pg_vector
+    restart: unless-stopped
+    ports:
+      - "6024:5432"
+    networks:
+      - localnet
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+networks:
+  localnet:
+    driver: bridge
+
+volumes:
+  data:
