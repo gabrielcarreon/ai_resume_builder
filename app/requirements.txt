@@ -5,3 +5,4 @@ langchain-ollama
 uvicorn
 watchdog
 llama-index
+dotenv
