@@ -4,3 +4,4 @@ langchain-classic
 langchain-ollama
 uvicorn
 watchdog
+llama-index
