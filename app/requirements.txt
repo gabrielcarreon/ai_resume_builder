@@ -1,8 +1,0 @@
-gradio
-langchain
-langchain-classic
-langchain-ollama
-uvicorn
-watchdog
-llama-index
-dotenv

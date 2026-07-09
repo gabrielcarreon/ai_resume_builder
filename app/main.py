@@ -4,11 +4,14 @@ import parsers.resume as resume_parser
 import parsers.skills as skills_parser
 import services.env_checker as env_checker
 
-def main(resume: gr.File, skills: gr.File):
+def main(resume: str | None, skills: str | None):
     env_checker.main()
-    pipeline.main(resume, resume_parser.main())
-
-    return "Ingested"
+    counts = []
+    if resume:
+        counts.append(pipeline.run(resume, resume_parser.main(), "resume"))
+    if skills:
+        counts.append(pipeline.run(skills, skills_parser.main(), "skills"))
+    return f"Ingested {sum(counts)} chunks"
 
 
 interface = gr.Interface(

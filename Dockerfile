@@ -4,8 +4,7 @@ WORKDIR /var/www/html
 
 COPY app/ .
 
-RUN pip install --no-cache-dir uv \
-    && uv run install.py
+RUN pip install --no-cache-dir uv
 
 EXPOSE 8000
 
