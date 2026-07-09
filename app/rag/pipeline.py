@@ -10,31 +10,27 @@ from dotenv import load_dotenv
 load_dotenv()
 
 vector_store=PGVectorStore(
-            connection_string=os.getenv("DATABASE_URL")
+            connection_string=os.getenv("DATABASE_URL"),
+            table_name="ai_resume_builder",
         )
 
-def create_pipeline():
+def create_pipeline(parser):
     pipeline = IngestionPipeline(
-        transformations=[
-            SemanticSplitterNodeParser(
-                buffer_size=1,
-                breakpoiint_percentile_threshold=95,
-                embed_model="nomic-embed-text"
-            ),
-           
-        ],
+        transformations=[parser],
         vector_store=vector_store
     )
     return pipeline
 
 def load_file(file):
-    reader = SimpleDirectoryReader(input_files=[file])
+    if file is None:
+        raise ValueError("No file uploaded")
+    reader = SimpleDirectoryReader(input_files=[file.value])
     return reader.load_data()
 
-def main(file):
-    file = load_file(file)
-    pipeline = create_pipeline()
-    pipeline.run(documents=file)
+def main(file, parser):
+    documents = load_file(file)
+    pipeline = create_pipeline(parser)
+    pipeline.run(documents=documents)
 
 if __name__ == "__main__":
     main()

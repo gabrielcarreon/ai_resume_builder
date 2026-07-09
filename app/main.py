@@ -1,16 +1,23 @@
 import gradio as gr
 import rag.pipeline as pipeline
+import parsers.resume as resume_parser
+import parsers.skills as skills_parser
+import services.env_checker as env_checker
 
-def main(files):
-    for file in files:
-        pipeline.main(file)
-    return files[0]
+def main(resume: gr.File, skills: gr.File):
+    env_checker.main()
+    pipeline.main(resume, resume_parser.main())
+
+    return "Ingested"
 
 
 interface = gr.Interface(
     fn=main,
-    inputs=[gr.File(label="Resume, Skills.MD etc", file_count="multiple")],
-    outputs=[gr.File(label="Translated Resume")],
+    inputs=[
+        gr.File(label="Resume", file_count="single"),
+        gr.File(label="Skills MD", file_count="single")
+    ],
+    outputs=[gr.Textbox(label="Ingested")],
     title="Hello World App",
 )
 
